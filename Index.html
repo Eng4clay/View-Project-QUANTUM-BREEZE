@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quantum Breeze — العرض التقديمي | IECE 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body {
+    width:100%; height:100%; overflow:hidden;
+    font-family:'Tajawal','Cairo',Tahoma,sans-serif;
+    background:#02060d; color:#e8f4ff;
+  }
+
+  /* ===== APP ===== */
+  #app { display:flex; flex-direction:column; height:100vh; }
+
+  /* ===== TOP BAR ===== */
+  #topbar {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 20px;
+    background:linear-gradient(90deg,#050a14,#0a1628,#050a14);
+    border-bottom:1px solid rgba(80,200,255,0.18);
+    box-shadow:0 2px 20px rgba(0,100,200,0.15);
+    z-index:100; flex-shrink:0;
+  }
+  #topbar .brand { display:flex; align-items:center; gap:12px; }
+  #topbar .brand .logo {
+    width:34px; height:34px; border-radius:8px;
+    background:linear-gradient(135deg,#5ff2ff,#3aa8ff,#a06bff);
+    display:flex; align-items:center; justify-content:center;
+    font-weight:900; font-size:16px; color:#031020;
+    box-shadow:0 0 20px rgba(90,200,255,0.5);
+  }
+  #topbar .brand .txt h1 {
+    font-size:14px; font-weight:800; letter-spacing:.4px;
+    background:linear-gradient(90deg,#5ff2ff,#3aa8ff,#a06bff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  #topbar .brand .txt p { font-size:10px; color:#6fa8c8; margin-top:1px; letter-spacing:.3px; }
+
+  #topbar .toolbar { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+
+  .tb-btn {
+    display:flex; align-items:center; gap:5px;
+    padding:8px 13px; font-size:11.5px; font-weight:700; cursor:pointer;
+    background:linear-gradient(160deg,rgba(20,50,80,0.85),rgba(10,25,45,0.85));
+    border:1px solid rgba(80,200,255,0.28); border-radius:9px; color:#bfe6ff;
+    transition:all .18s; font-family:inherit; white-space:nowrap;
+    text-decoration:none;
+  }
+  .tb-btn:hover {
+    background:linear-gradient(160deg,rgba(30,80,130,0.95),rgba(15,40,70,0.95));
+    border-color:rgba(100,220,255,0.6); color:#fff; transform:translateY(-1px);
+  }
+  .tb-btn.primary { background:linear-gradient(160deg,#1c6fa8,#0d4570); border-color:#4fd0ff; color:#fff; }
+  .tb-btn.primary:hover { background:linear-gradient(160deg,#2a8fd0,#0f5a94); }
+  .tb-btn.success { background:linear-gradient(160deg,#1a8a5a,#0d5a3a); border-color:#4fffaa; color:#fff; }
+  .tb-btn.danger { border-color:rgba(255,120,80,0.4); color:#ff9a70; }
+  .tb-btn.danger:hover { background:linear-gradient(160deg,#8a2a1a,#5a1a10); border-color:#ff7a4c; color:#fff; }
+
+  .status-dot { display:flex; align-items:center; gap:6px; font-size:11px; color:#5cffb0; padding:0 8px; }
+  .status-dot .d {
+    width:7px; height:7px; border-radius:50%; background:#5cffb0;
+    box-shadow:0 0 8px #5cffb0; animation:pulse 1.8s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.35;} }
+
+  /* ===== STAGE ===== */
+  #stage {
+    flex:1; display:flex; align-items:center; justify-content:center;
+    padding:20px;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(50,120,200,0.14), transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(120,60,180,0.1), transparent 55%),
+      #02060d;
+    position:relative; overflow:hidden;
+  }
+  #stage::before {
+    content:''; position:absolute; inset:0;
+    background-image:
+      linear-gradient(rgba(80,200,255,0.035) 1px, transparent 1px),
+      linear-gradient(90deg,rgba(80,200,255,0.035) 1px, transparent 1px);
+    background-size:44px 44px; pointer-events:none;
+  }
+
+  #slideWrap {
+    position:relative;
+    width:min(1280px,95vw);
+    aspect-ratio:16/9;
+    background:linear-gradient(140deg,#071220,#0a1c32 55%,#071220);
+    border-radius:16px;
+    box-shadow:
+      0 30px 90px rgba(0,20,60,0.75),
+      0 0 0 1px rgba(80,200,255,0.22),
+      inset 0 0 90px rgba(0,80,160,0.12);
+    overflow:hidden;
+  }
+
+  #slideContent {
+    position:absolute; inset:0; padding:40px 55px;
+    display:flex; flex-direction:column;
+    color:#e8f4ff;
+    overflow:hidden;
+  }
+  #slideContent .slide-num-badge {
+    position:absolute; bottom:16px; left:28px;
+    font-size:11px; color:#5a86a8; letter-spacing:1.5px; font-weight:700;
+  }
+  #slideContent .slide-brand {
+    position:absolute; bottom:16px; right:28px;
+    font-size:10.5px; color:#4a7ea0; letter-spacing:.6px;
+    display:flex; align-items:center; gap:8px;
+  }
+  #slideContent .slide-brand::before {
+    content:''; width:20px; height:1px; background:linear-gradient(90deg,transparent,#3aa8ff);
+  }
+
+  /* ===== SLIDE TYPOGRAPHY ===== */
+  .sl-title {
+    font-size:32px; font-weight:900; line-height:1.25;
+    background:linear-gradient(90deg,#5ff2ff,#3aa8ff,#a06bff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    margin-bottom:6px; letter-spacing:-0.3px;
+  }
+  .sl-subtitle {
+    font-size:13.5px; color:#8ab6d4; line-height:1.55; margin-bottom:16px; font-weight:500;
+  }
+  .sl-divider {
+    width:80px; height:3px; border-radius:2px;
+    background:linear-gradient(90deg,#2aa8ff,#a06bff);
+    margin-bottom:16px;
+  }
+  .sl-body { flex:1; display:flex; flex-direction:column; gap:10px; overflow:hidden; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background:linear-gradient(150deg,rgba(14,36,60,0.6),rgba(8,20,38,0.5));
+    border:1px solid rgba(80,200,255,0.18);
+    border-radius:12px; padding:14px 18px;
+    transition:all .25s;
+  }
+  .card:hover {
+    border-color:rgba(100,220,255,0.4);
+    box-shadow:0 6px 24px rgba(0,80,160,0.2);
+  }
+  .card h3 {
+    font-size:14px; font-weight:800; color:#7fe9ff; margin-bottom:6px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .card h3 .num {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:22px; height:22px; border-radius:6px;
+    background:linear-gradient(135deg,#2aa8ff,#1a5a8a);
+    color:#fff; font-size:11px; font-weight:900;
+    box-shadow:0 0 12px rgba(80,200,255,0.5);
+  }
+  .card p { font-size:12.5px; line-height:1.7; color:#b0cbe0; }
+
+  .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .grid-5 { display:grid; grid-template-columns:repeat(5,1fr); gap:9px; }
+
+  /* ===== METRICS ===== */
+  .metric {
+    background:linear-gradient(150deg,rgba(14,36,60,0.7),rgba(8,20,38,0.55));
+    border:1px solid rgba(80,200,255,0.22);
+    border-radius:11px; padding:14px 12px; text-align:center;
+    position:relative; overflow:hidden; transition:all .25s;
+  }
+  .metric::after {
+    content:''; position:absolute; top:0; right:0; left:0; height:3px;
+    background:linear-gradient(90deg,#2aa8ff,#a06bff);
+  }
+  .metric:hover { transform:translateY(-2px); box-shadow:0 8px 26px rgba(0,90,180,0.28); }
+  .metric .v {
+    font-size:24px; font-weight:900; line-height:1.1;
+    background:linear-gradient(90deg,#5ff2ff,#3aa8ff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .metric .l { font-size:10.5px; color:#8ab6d4; margin-top:5px; font-weight:600; line-height:1.35; }
+  .metric.green::after { background:linear-gradient(90deg,#2ad8a0,#5cffb0); }
+  .metric.green .v { background:linear-gradient(90deg,#5cffb0,#2ad8a0); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .metric.purple::after { background:linear-gradient(90deg,#a06bff,#c48bff); }
+  .metric.purple .v { background:linear-gradient(90deg,#c48bff,#a06bff); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .metric.orange::after { background:linear-gradient(90deg,#ff7a3c,#ffb066); }
+  .metric.orange .v { background:linear-gradient(90deg,#ffb066,#ff7a3c); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+  /* ===== LISTS ===== */
+  .sl-list { list-style:none; display:flex; flex-direction:column; gap:6px; }
+  .sl-list li {
+    display:flex; align-items:flex-start; gap:10px;
+    font-size:12px; line-height:1.55; color:#c5ddef;
+    padding:6px 10px; border-radius:8px;
+    background:rgba(30,70,110,0.2);
+    border-right:3px solid #2aa8ff;
+  }
+  .sl-list li .ic {
+    flex-shrink:0; width:18px; height:18px; border-radius:5px;
+    background:linear-gradient(135deg,#2aa8ff,#1a5a8a);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:900; color:#fff;
+  }
+  .sl-list.green li { border-right-color:#2ad8a0; }
+  .sl-list.green li .ic { background:linear-gradient(135deg,#2ad8a0,#1a8a60); }
+  .sl-list.purple li { border-right-color:#a06bff; }
+  .sl-list.purple li .ic { background:linear-gradient(135deg,#a06bff,#6a3a9f); }
+  .sl-list.orange li { border-right-color:#ff8a5c; }
+  .sl-list.orange li .ic { background:linear-gradient(135deg,#ff8a5c,#c05a2a); }
+
+  /* ===== TEAM CARDS ===== */
+  .team-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; flex:1; }
+  .team-card {
+    background:linear-gradient(150deg,rgba(14,36,60,0.7),rgba(8,20,38,0.5));
+    border:1px solid rgba(80,200,255,0.25);
+    border-radius:14px; padding:18px;
+    display:flex; flex-direction:column; gap:10px;
+    position:relative; overflow:hidden;
+  }
+  .team-card::before {
+    content:''; position:absolute; top:0; right:0; left:0; height:4px;
+    background:linear-gradient(90deg,#2aa8ff,#a06bff);
+  }
+  .team-card .avatar {
+    width:60px; height:60px; border-radius:14px;
+    background:linear-gradient(135deg,#1a5a8a,#a06bff);
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; font-weight:900; color:#fff;
+    box-shadow:0 0 24px rgba(80,200,255,0.4);
+  }
+  .team-card .name { font-size:17px; font-weight:800; color:#fff; line-height:1.3; }
+  .team-card .role {
+    display:inline-block; font-size:10.5px; font-weight:700;
+    padding:3px 10px; border-radius:20px;
+    background:rgba(80,200,255,0.15); color:#7fe9ff;
+    border:1px solid rgba(80,200,255,0.35);
+    margin-top:2px;
+  }
+  .team-card .info-list { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+  .team-card .info-item {
+    display:flex; align-items:center; gap:8px;
+    font-size:11.5px; color:#b0cbe0;
+  }
+  .team-card .info-item .ic2 {
+    width:22px; height:22px; border-radius:6px;
+    background:rgba(80,200,255,0.12);
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; flex-shrink:0;
+  }
+
+  /* ===== TABLES ===== */
+  .sl-table { width:100%; border-collapse:separate; border-spacing:0 4px; font-size:11.5px; }
+  .sl-table th {
+    text-align:right; padding:8px 12px; font-weight:800; color:#7fe9ff;
+    background:rgba(20,60,100,0.4); font-size:11px;
+  }
+  .sl-table th:first-child { border-radius:0 8px 8px 0; }
+  .sl-table th:last-child { border-radius:8px 0 0 8px; }
+  .sl-table td {
+    padding:8px 12px; background:rgba(12,30,52,0.45);
+    color:#c5ddef; font-weight:500;
+  }
+  .sl-table tr td:first-child {
+    border-radius:0 8px 8px 0; border-right:3px solid #2aa8ff;
+  }
+  .sl-table tr td:last-child { border-radius:8px 0 0 8px; }
+  .sl-table .good { color:#5cffb0; font-weight:700; }
+
+  /* ===== NOTE BOX ===== */
+  .note-box {
+    background:linear-gradient(150deg,rgba(40,100,160,0.25),rgba(60,30,120,0.2));
+    border:1px solid rgba(120,180,255,0.35);
+    border-radius:10px; padding:12px 16px; margin-top:8px;
+    font-size:11.5px; color:#c5e2f5; line-height:1.7;
+  }
+  .note-box strong { color:#7fe9ff; }
+
+  /* ===== NAVBAR ===== */
+  #navbar {
+    display:flex; align-items:center; justify-content:center; gap:12px;
+    padding:10px; background:linear-gradient(90deg,#050a14,#0a1628,#050a14);
+    border-top:1px solid rgba(80,200,255,0.18);
+    flex-shrink:0;
+  }
+
+  .nav-btn {
+    width:38px; height:38px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg,rgba(20,50,80,0.85),rgba(10,25,45,0.85));
+    border:1px solid rgba(80,200,255,0.28); color:#bfe6ff;
+    cursor:pointer; transition:all .18s; font-size:15px;
+  }
+  .nav-btn:hover { background:linear-gradient(160deg,rgba(30,80,130,0.95),rgba(15,40,70,0.95)); color:#fff; border-color:rgba(100,220,255,0.6); }
+  .nav-btn:disabled { opacity:0.3; cursor:not-allowed; }
+
+  #slideIndicator {
+    display:flex; align-items:center; gap:6px;
+    font-size:12px; color:#8ab6d4; font-weight:600;
+    min-width:100px; justify-content:center;
+  }
+  #slideIndicator .cur { color:#7fe9ff; font-weight:800; font-size:14px; }
+
+  /* ===== SIDEBAR ===== */
+  #sidebar {
+    position:fixed; top:0; right:0; bottom:0; width:240px;
+    background:linear-gradient(180deg,#04080f,#0a1424);
+    border-left:1px solid rgba(80,200,255,0.2);
+    z-index:200; transform:translateX(100%);
+    transition:transform .35s cubic-bezier(.4,0,.2,1);
+    display:flex; flex-direction:column;
+    box-shadow:-10px 0 40px rgba(0,0,0,0.5);
+  }
+  #sidebar.open { transform:translateX(0); }
+  #sidebar .sb-head {
+    padding:14px 16px; border-bottom:1px solid rgba(80,200,255,0.15);
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  #sidebar .sb-head h3 { font-size:12px; color:#7fe9ff; letter-spacing:1px; text-transform:uppercase; }
+  #sidebar .sb-close {
+    width:26px; height:26px; border-radius:7px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.05); color:#8ab6d4; font-size:14px;
+  }
+  #sidebar .sb-close:hover { background:rgba(255,120,80,0.2); color:#ff9a70; }
+
+  #sbList { flex:1; overflow-y:auto; padding:10px; }
+  #sbList::-webkit-scrollbar { width:5px; }
+  #sbList::-webkit-scrollbar-thumb { background:rgba(80,200,255,0.3); border-radius:3px; }
+
+  .sb-item {
+    display:flex; align-items:center; gap:10px;
+    padding:9px 12px; border-radius:9px; cursor:pointer;
+    margin-bottom:5px; transition:all .18s;
+    border:1px solid transparent;
+  }
+  .sb-item:hover { background:rgba(80,200,255,0.08); }
+  .sb-item.active {
+    background:rgba(80,200,255,0.14);
+    border-color:rgba(80,200,255,0.4);
+    box-shadow:0 0 14px rgba(80,200,255,0.2);
+  }
+  .sb-item .num {
+    flex-shrink:0; width:24px; height:24px; border-radius:6px;
+    background:rgba(80,200,255,0.15); color:#7fe9ff;
+    display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:800;
+  }
+  .sb-item.active .num { background:linear-gradient(135deg,#2aa8ff,#1a5a8a); color:#fff; }
+  .sb-item .t { font-size:11.5px; color:#b0cbe0; font-weight:600; line-height:1.3; }
+  .sb-item.active .t { color:#fff; }
+
+  /* ===== EDIT MODE ===== */
+  [contenteditable="true"] { outline:none; border-radius:5px; transition:all .15s; }
+  body.editing [contenteditable="true"]:hover {
+    background:rgba(80,200,255,0.06);
+    box-shadow:inset 0 0 0 1px rgba(80,200,255,0.25);
+  }
+  body.editing [contenteditable="true"]:focus {
+    background:rgba(80,200,255,0.09);
+    box-shadow:inset 0 0 0 2px rgba(80,200,255,0.55);
+  }
+  body:not(.editing) [contenteditable="true"] { cursor:default; }
+
+  #editModeBadge {
+    position:fixed; top:76px; right:20px;
+    padding:6px 14px; border-radius:20px;
+    background:linear-gradient(135deg,#ff8a3c,#c04a1a);
+    color:#fff; font-size:11px; font-weight:800;
+    box-shadow:0 4px 18px rgba(255,120,60,0.5);
+    z-index:150; display:none; align-items:center; gap:7px;
+  }
+  #editModeBadge::before {
+    content:''; width:7px; height:7px; border-radius:50%; background:#fff;
+    animation:pulse 1.2s infinite;
+  }
+  body.editing #editModeBadge { display:flex; }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position:fixed; bottom:80px; left:50%; transform:translate(-50%,20px);
+    padding:12px 26px; font-size:13px; font-weight:700; color:#fff;
+    background:linear-gradient(135deg,rgba(20,60,100,0.96),rgba(10,35,65,0.96));
+    border:1px solid rgba(80,200,255,0.5);
+    border-radius:12px; opacity:0; transition:all .35s; pointer-events:none;
+    box-shadow:0 10px 40px rgba(0,80,180,0.4);
+    z-index:500; letter-spacing:.3px;
+  }
+  #toast.show { opacity:1; transform:translate(-50%,0); }
+  #toast.success { border-color:rgba(92,255,176,0.6); }
+  #toast.error { border-color:rgba(255,120,80,0.6); }
+
+  /* ===== PROGRESS ===== */
+  #progressBar {
+    position:absolute; top:0; left:0; right:0; height:2px;
+    background:rgba(80,200,255,0.1); z-index:2;
+  }
+  #progressBar .fill {
+    height:100%; width:0%;
+    background:linear-gradient(90deg,#2aa8ff,#a06bff,#5ff2ff);
+    transition:width .4s ease;
+    box-shadow:0 0 10px rgba(80,200,255,0.6);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    #slideContent { padding:28px 34px; }
+    .sl-title { font-size:26px; }
+    .grid-5 { grid-template-columns:repeat(3,1fr); }
+  }
+  @media (max-width: 800px) {
+    .grid-3,.grid-4,.grid-5 { grid-template-columns:1fr 1fr; }
+    .team-grid { grid-template-columns:1fr; }
+    #slideContent { padding:22px 24px; }
+    .sl-title { font-size:20px; }
+    .sl-subtitle { font-size:11px; }
+    .metric .v { font-size:18px; }
+    .tb-btn { padding:6px 10px; font-size:10.5px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ===== TOP BAR ===== -->
+  <div id="topbar">
+    <div class="brand">
+      <div class="logo">Q</div>
+      <div class="txt">
+        <h1>QUANTUM BREEZE — عرض المشروع</h1>
+        <p>الهيئة السعودية للمهندسين · IECE 2026 · مسار البناء الذكي منخفض التكلفة</p>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <div class="status-dot" id="saveStatus">
+        <span class="d"></span><span id="saveStatusText">تم الحفظ</span>
+      </div>
+      <button class="tb-btn" id="btnSidebar" title="عرض الشرائح">☰ الشرائح</button>
+      <button class="tb-btn" id="btnEdit" title="تحرير المحتوى">✎ تحرير</button>
+      <button class="tb-btn" id="btnLoadJSON" title="استيراد مشروع">⬆ استيراد</button>
+      <button class="tb-btn" id="btnSaveJSON" title="حفظ نسخة">⬇ حفظ نسخة</button>
+      <button class="tb-btn danger" id="btnReset" title="استعادة الأصل">⟲ استعادة</button>
+      <button class="tb-btn primary" id="btnPDF" title="تصدير PDF">📄 PDF</button>
+      <button class="tb-btn success" id="btnPPTX" title="تصدير PowerPoint">📊 PowerPoint</button>
+    </div>
+    <input type="file" id="fileInput" accept=".json" style="display:none" />
+  </div>
+
+  <!-- ===== SLIDE STAGE ===== -->
+  <div id="stage">
+    <div id="slideWrap">
+      <div id="progressBar"><div class="fill" id="progressFill"></div></div>
+      <div id="slideContent"></div>
+    </div>
+  </div>
+
+  <!-- ===== NAV BAR ===== -->
+  <div id="navbar">
+    <button class="nav-btn" id="navFirst" title="الأولى">⏮</button>
+    <button class="nav-btn" id="navPrev" title="السابقة">◀</button>
+    <div id="slideIndicator">
+      <span class="cur" id="curNum">1</span>
+      <span>/</span>
+      <span id="totalNum">12</span>
+    </div>
+    <button class="nav-btn" id="navNext" title="التالية">▶</button>
+    <button class="nav-btn" id="navLast" title="الأخيرة">⏭</button>
+  </div>
+</div>
+
+<!-- ===== SIDEBAR ===== -->
+<div id="sidebar">
+  <div class="sb-head">
+    <h3>قائمة الشرائح</h3>
+    <div class="sb-close" id="sbClose">✕</div>
+  </div>
+  <div id="sbList"></div>
+</div>
+
+<div id="editModeBadge">وضع التحرير مُفعّل — انقر أي نص لتعديله</div>
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   SLIDES DATA — 12 slides
+   ================================================================ */
+const DEFAULT_DATA = {
+  slides: [
+    /* ===== SLIDE 1: TITLE ===== */
+    {
+      id:'s1', title:'الغلاف',
+      render: () => `
+        <div style="display:flex;flex-direction:column;justify-content:center;height:100%;text-align:center;align-items:center;">
+          <div style="display:inline-flex;align-items:center;gap:10px;padding:7px 20px;border-radius:30px;background:rgba(80,200,255,0.1);border:1px solid rgba(80,200,255,0.4);margin-bottom:22px;">
+            <span style="width:8px;height:8px;border-radius:50%;background:#5cffb0;box-shadow:0 0 12px #5cffb0;"></span>
+            <span style="font-size:12px;color:#7fe9ff;font-weight:700;letter-spacing:.6px;" contenteditable="true">مسابقة الهيئة السعودية للمهندسين · IECE 2026</span>
+          </div>
+
+          <h1 style="font-size:66px;font-weight:900;line-height:1.05;margin-bottom:12px;letter-spacing:-1.5px;
+                     background:linear-gradient(90deg,#5ff2ff,#3aa8ff,#a06bff,#5ff2ff);
+                     background-size:200% 100%;-webkit-background-clip:text;background-clip:text;
+                     -webkit-text-fill-color:transparent;color:transparent;
+                     animation:shine 6s linear infinite;" contenteditable="true">QUANTUM BREEZE</h1>
+
+          <p style="font-size:17px;color:#b0cbe0;line-height:1.55;max-width:780px;margin-bottom:6px;font-weight:500;" contenteditable="true">نظام تكييف مركزي متكامل بدون ضاغط وبدون غاز تبريد</p>
+          <p style="font-size:12.5px;color:#8ab6d4;margin-bottom:28px;" contenteditable="true">تكامل خمس تقنيات متقدمة في منظومة واحدة ذات تفاعل تآزري</p>
+
+          <div style="display:flex;gap:22px;margin-bottom:20px;flex-wrap:wrap;justify-content:center;">
+            <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#8ab6d4;">
+              <span style="color:#7fe9ff;font-size:14px;">◈</span>
+              <span contenteditable="true">مسار البناء الذكي منخفض التكلفة</span>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+            <div style="padding:12px 22px;border-radius:12px;background:linear-gradient(150deg,rgba(14,36,60,0.7),rgba(8,20,38,0.5));border:1px solid rgba(80,200,255,0.28);">
+              <div style="font-size:10.5px;color:#6a9ec0;letter-spacing:1px;margin-bottom:4px;">مقدم الفكرة</div>
+              <div style="font-size:13px;font-weight:800;color:#fff;" contenteditable="true">م. أحمد علي بوكر نسيب العقيلي</div>
+              <div style="font-size:10.5px;color:#7fe9ff;margin-top:3px;" contenteditable="true">مهندس ميكانيكي · HVAC</div>
+            </div>
+            <div style="padding:12px 22px;border-radius:12px;background:linear-gradient(150deg,rgba(14,36,60,0.7),rgba(8,20,38,0.5));border:1px solid rgba(80,200,255,0.28);">
+              <div style="font-size:10.5px;color:#6a9ec0;letter-spacing:1px;margin-bottom:4px;">شريك التطوير</div>
+              <div style="font-size:13px;font-weight:800;color:#fff;" contenteditable="true">م. عبدالرحمن زين يحيى صهلولي المنيفي</div>
+              <div style="font-size:10.5px;color:#7fe9ff;margin-top:3px;" contenteditable="true">مهندس مدني</div>
+            </div>
+          </div>
+        </div>
+        <style>@keyframes shine{to{background-position:-200% 0;}}</style>
+      `
+    },
+
+    /* ===== SLIDE 2: PROBLEM ===== */
+    {
+      id:'s2', title:'المشكلة — أرقام موثقة',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">المشكلة — أرقام موثقة علمياً</h2>
+        <div class="sl-subtitle" contenteditable="true">Verified numbers from official sources — IPCC · كفاءة · CARB</div>
+        <div class="sl-body">
+          <div class="grid-3" style="margin-bottom:8px;">
+            <div class="metric orange">
+              <div class="v">50-70%</div>
+              <div class="l">من كهرباء المبنى للتكييف<br><span style="font-size:9px;opacity:0.7;">(كفاءة السعودي)</span></div>
+            </div>
+            <div class="metric purple">
+              <div class="v">×2088</div>
+              <div class="l">GWP لغاز R-410A<br><span style="font-size:9px;opacity:0.7;">(IPCC)</span></div>
+            </div>
+            <div class="metric">
+              <div class="v">1.8-5%</div>
+              <div class="l">معدل التسريب السنوي<br><span style="font-size:9px;opacity:0.7;">(CARB)</span></div>
+            </div>
+          </div>
+
+          <div class="grid-2" style="flex:1;">
+            <div class="card">
+              <h3><span class="num">✕</span><span contenteditable="true">مشاكل الأنظمة التقليدية</span></h3>
+              <ul class="sl-list orange" style="margin-top:6px;">
+                <li><span class="ic">×</span><span contenteditable="true">استهلاك مرتفع للكهرباء</span></li>
+                <li><span class="ic">×</span><span contenteditable="true">انبعاثات HFCs ضارة (GWP 1,400-4,000)</span></li>
+                <li><span class="ic">×</span><span contenteditable="true">ضوضاء 60-75 dB</span></li>
+                <li><span class="ic">×</span><span contenteditable="true">عمر قصير (10-15 سنة)</span></li>
+                <li><span class="ic">×</span><span contenteditable="true">صيانة متكررة مرتفعة</span></li>
+              </ul>
+            </div>
+
+            <div class="card">
+              <h3><span class="num">✓</span><span contenteditable="true">الفجوة في السوق</span></h3>
+              <ul class="sl-list green" style="margin-top:6px;">
+                <li><span class="ic">◈</span><span contenteditable="true">كل تقنية معروفة منفردة</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">لا يوجد نظام تجاري واحد</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">يدمج التقنيات الخمس</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">في منظومة متكاملة</span></li>
+                <li><span class="ic" style="background:linear-gradient(135deg,#5cffb0,#1a8a5a);">✓</span><span contenteditable="true" style="color:#5cffb0;font-weight:700;">هذا هو تمايز Quantum Breeze</span></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="note-box">
+            <strong>مثال توضيحي:</strong> تسرّب 1 كجم من R-410A (GWP 2,088) ≈ أثر 2 طن CO₂ خلال 100 سنة = قيادة سيارة أكثر من 12,000 كم.
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 3: SOLUTION ===== */
+    {
+      id:'s3', title:'الحل — خمس تقنيات',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">الحل — خمس تقنيات في منظومة واحدة</h2>
+        <div class="sl-subtitle" contenteditable="true">Five integrated technologies with synergistic interaction — الميزة الجوهرية</div>
+        <div class="sl-body">
+          <div class="grid-5">
+            <div class="card" style="text-align:center;padding:14px 10px;">
+              <div style="font-size:26px;margin-bottom:6px;">❄</div>
+              <h3 style="justify-content:center;font-size:12px;"><span contenteditable="true">تبريد إشعاعي</span></h3>
+              <p style="font-size:10.5px;text-align:center;" contenteditable="true">بثّ الحرارة للفضاء عبر 8-13 µm</p>
+            </div>
+            <div class="card" style="text-align:center;padding:14px 10px;">
+              <div style="font-size:26px;margin-bottom:6px;">☀</div>
+              <h3 style="justify-content:center;font-size:12px;"><span contenteditable="true">تجفيف شمسي</span></h3>
+              <p style="font-size:10.5px;text-align:center;" contenteditable="true">عجلة سيليكا جل + تجديد شمسي</p>
+            </div>
+            <div class="card" style="text-align:center;padding:14px 10px;">
+              <div style="font-size:26px;margin-bottom:6px;">⚛</div>
+              <h3 style="justify-content:center;font-size:12px;"><span contenteditable="true">تبريد مغناطيسي</span></h3>
+              <p style="font-size:10.5px;text-align:center;" contenteditable="true">AMR من Gd-Si-Ge بدون ضاغط</p>
+            </div>
+            <div class="card" style="text-align:center;padding:14px 10px;">
+              <div style="font-size:26px;margin-bottom:6px;">▣</div>
+              <h3 style="justify-content:center;font-size:12px;"><span contenteditable="true">تخزين PCM</span></h3>
+              <p style="font-size:10.5px;text-align:center;" contenteditable="true">شحن ليلي وتفريغ نهاري</p>
+            </div>
+            <div class="card" style="text-align:center;padding:14px 10px;">
+              <div style="font-size:26px;margin-bottom:6px;">◈</div>
+              <h3 style="justify-content:center;font-size:12px;"><span contenteditable="true">تحكم AI</span></h3>
+              <p style="font-size:10.5px;text-align:center;" contenteditable="true">تنبؤ + تحسين متعدد الأهداف</p>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:6px;background:linear-gradient(150deg,rgba(40,100,160,0.35),rgba(60,30,120,0.3));border-color:rgba(120,180,255,0.4);">
+            <p style="text-align:center;font-size:13px;color:#c5e2f5;font-weight:600;" contenteditable="true">
+              ◈ التفاعل التآزري — التجفيف يمنع الجليد على AMR ← الإشعاع يشحن PCM ← PCM يستقر الحرارة ← AI يوفر 15-25% إضافية
+            </p>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 4: DESICCANT ===== */
+    {
+      id:'s4', title:'التقنية 1 — التجفيف الشمسي',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">التقنية 1 — التجفيف الشمسي</h2>
+        <div class="sl-subtitle" contenteditable="true">Solar Desiccant Dehumidification — المرحلة الأولى من الدورة</div>
+        <div class="sl-body">
+          <div class="grid-2" style="flex:1;">
+            <div class="card" style="border-right:4px solid #7fe9ff;">
+              <h3><span class="num">⚙</span><span contenteditable="true">الوصف التقني</span></h3>
+              <ul class="sl-list" style="margin-top:8px;">
+                <li><span class="ic">◈</span><span contenteditable="true">عجلة سيليكا جل دوارة</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">امتصاص الرطوبة من الهواء</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">تجديد بحرارة الشمس 60-80 °C</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">خفض الرطوبة حتى 40%</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">استهلاك كهربائي منخفض جداً</span></li>
+              </ul>
+            </div>
+
+            <div class="card" style="border-right:4px solid #5cffb0;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#2ad8a0,#1a8a60);">🎯</span><span contenteditable="true" style="color:#5cffb0;">الميزة في Quantum Breeze</span></h3>
+              <p contenteditable="true" style="margin-top:8px;">خفض الحمل الكامن قبل مرحلة التبريد يمنع تكوّن الجليد على سطح المجدد المغناطيسي (AMR) في المبرد المغناطيسي.</p>
+              <p contenteditable="true" style="color:#5cffb0;font-weight:700;margin-top:8px;">هذا التفاعل التآزري يُتوقع أن يرفع كفاءة الدورة المغناطيسية بنسبة تصل إلى 18%.</p>
+              <p contenteditable="true" style="font-size:10px;color:#8ab6d4;font-style:italic;margin-top:6px;">(هدف تصميمي يخضع للتحقق التجريبي)</p>
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 5: MAGNETOCALORIC ===== */
+    {
+      id:'s5', title:'التقنية 2 — التبريد المغناطيسي',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">التقنية 2 — التبريد المغناطيسي</h2>
+        <div class="sl-subtitle" contenteditable="true">Magnetocaloric Cooling — قلب النظام بدون ضاغط وبدون غاز تبريد</div>
+        <div class="sl-body">
+          <div class="grid-2" style="flex:1;">
+            <div class="card" style="border-right:4px solid #ff8a5c;">
+              <h3><span class="num">⚙</span><span contenteditable="true">الوصف التقني</span></h3>
+              <ul class="sl-list orange" style="margin-top:8px;">
+                <li><span class="ic">◈</span><span contenteditable="true">مادة Gd-Si-Ge في المجدد AMR</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">مجال مغناطيسي 0.8-1.5 تسلا</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">دوران 60-120 دورة/دقيقة</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">ΔT للدورة ~12 °C</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">لا ضاغط · لا غاز تبريد · صفر HFCs</span></li>
+              </ul>
+            </div>
+
+            <div class="card" style="border-right:4px solid #5cffb0;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#2ad8a0,#1a8a60);">🎯</span><span contenteditable="true" style="color:#5cffb0;">الميزة في Quantum Breeze</span></h3>
+              <p contenteditable="true" style="margin-top:8px;">استبدال كامل لدورة الانضغاط البخاري.</p>
+              <p contenteditable="true" style="margin-top:6px;"><span style="color:#5cffb0;font-weight:700;">صفر انبعاثات</span> من غازات التبريد → GWP = 0 بدل 2,088 لـ R-410A.</p>
+              <p contenteditable="true" style="margin-top:6px;">المجدد المغناطيسي النشط (AMR) يعمل بتقنية طبقات مكدّسة، مما يُعزز نقل الحرارة مع مائع هيدروليكي متزامن.</p>
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 6: PCM + RADIATIVE ===== */
+    {
+      id:'s6', title:'التقنية 3 و 4 — PCM والإشعاع',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">التقنية 3 و 4 — PCM والإشعاع الفضائي</h2>
+        <div class="sl-subtitle" contenteditable="true">PCM Thermal Storage + Passive Radiative Cooling</div>
+        <div class="sl-body">
+          <div class="grid-2" style="flex:1;">
+            <div class="card" style="border-right:4px solid #5cffb0;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#2ad8a0,#1a8a60);">❄</span><span contenteditable="true" style="color:#5cffb0;">خزان PCM</span></h3>
+              <ul class="sl-list green" style="margin-top:8px;">
+                <li><span class="ic">◈</span><span contenteditable="true">مادة متغيرة الطور RT-12</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">حرارة انصهار 12 °C</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">شحن ليلي ← تفريغ نهاري</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">هدف خفض الذروة 50%</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">هدف استقرار حراري 60%</span></li>
+              </ul>
+            </div>
+
+            <div class="card" style="border-right:4px solid #c48bff;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#a06bff,#6a3a9f);">☀</span><span contenteditable="true" style="color:#c48bff;">التبريد الإشعاعي الفضائي</span></h3>
+              <ul class="sl-list purple" style="margin-top:8px;">
+                <li><span class="ic">◈</span><span contenteditable="true">نافذة 8-13 ميكرومتر</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">إشعاع مباشر إلى الفضاء (3K)</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">قدرة مُقاسة: 70-157 W/m²</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">بدون أي استهلاك كهرباء</span></li>
+                <li><span class="ic">◈</span><span contenteditable="true">مُثبت في دراسات محكمة (ACS)</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 7: AI ===== */
+    {
+      id:'s7', title:'التقنية 5 — وحدة الذكاء الاصطناعي',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">التقنية 5 — وحدة التحكم بالذكاء الاصطناعي</h2>
+        <div class="sl-subtitle" contenteditable="true">AI Control Unit — العقل المُدبّر للمنظومة المتكاملة</div>
+        <div class="sl-body">
+          <div class="card" style="border-right:4px solid #ffd75c;">
+            <h3><span class="num" style="background:linear-gradient(135deg,#e0a020,#a87020);">◆</span><span contenteditable="true" style="color:#ffd75c;">الوظائف الأساسية</span></h3>
+            <ul class="sl-list" style="margin-top:10px;">
+              <li><span class="ic">١</span><span contenteditable="true">قياس آني من <strong>12 نقطة</strong> حرارة ورطوبة موزعة على مراحل النظام</span></li>
+              <li><span class="ic">٢</span><span contenteditable="true">التنبؤ بذروة الطلب باستخدام نماذج تعلّم آلي (Machine Learning)</span></li>
+              <li><span class="ic">٣</span><span contenteditable="true">تحسين توزيع الطاقة والماء بين المراحل الخمس بشكل تكيفي</span></li>
+              <li><span class="ic">٤</span><span contenteditable="true">زمن الاستجابة <strong>أقل من ثانية</strong> (Real-Time Response)</span></li>
+              <li><span class="ic">٥</span><span contenteditable="true">منصة سحابية لربط وإدارة شبكة من الأنظمة في عدة مبانٍ</span></li>
+              <li><span class="ic">٦</span><span contenteditable="true">التوأم الرقمي لمحاكاة الأداء والتنبؤ بالأعطال قبل حدوثها</span></li>
+            </ul>
+          </div>
+
+          <div class="note-box" style="text-align:center;">
+            <strong>الهدف:</strong> <span contenteditable="true">وفر إضافي 15-25% فوق ما تحققه التقنيات الأربع الأخرى</span>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 8: MANUFACTURING ===== */
+    {
+      id:'s8', title:'التصنيع المحلي',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">التصنيع المحلي — دعم المحتوى المحلي</h2>
+        <div class="sl-subtitle" contenteditable="true">Local Manufacturing — Vision 2030 Alignment</div>
+        <div class="sl-body">
+          <div class="grid-3">
+            <div class="card" style="text-align:center;border-top:3px solid #7fe9ff;">
+              <div style="font-size:22px;margin-bottom:6px;">🧲</div>
+              <h3 style="justify-content:center;font-size:12.5px;"><span contenteditable="true">مغناطيسات NdFeB</span></h3>
+            </div>
+            <div class="card" style="text-align:center;border-top:3px solid #ff8a5c;">
+              <div style="font-size:22px;margin-bottom:6px;">⚛</div>
+              <h3 style="justify-content:center;font-size:12.5px;"><span contenteditable="true">مادة Gd-Si-Ge</span></h3>
+            </div>
+            <div class="card" style="text-align:center;border-top:3px solid #5ff2ff;">
+              <div style="font-size:22px;margin-bottom:6px;">💧</div>
+              <h3 style="justify-content:center;font-size:12.5px;"><span contenteditable="true">سيليكا جل</span></h3>
+            </div>
+            <div class="card" style="text-align:center;border-top:3px solid #5cffb0;">
+              <div style="font-size:22px;margin-bottom:6px;">▣</div>
+              <h3 style="justify-content:center;font-size:12.5px;"><span contenteditable="true">شمع برافيني RT-12</span></h3>
+            </div>
+            <div class="card" style="text-align:center;border-top:3px solid #ffd75c;">
+              <div style="font-size:22px;margin-bottom:6px;">🔌</div>
+              <h3 style="justify-content:center;font-size:12.5px;"><span contenteditable="true">مكونات التحكم الإلكترونية</span></h3>
+            </div>
+            <div class="card" style="text-align:center;border-top:3px solid #c48bff;">
+              <div style="font-size:22px;margin-bottom:6px;">🏗</div>
+              <h3 style="justify-content:center;font-size:12.5px;"><span contenteditable="true">الهياكل المعدنية والبلاستيكية</span></h3>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:10px;background:linear-gradient(150deg,rgba(40,100,160,0.35),rgba(60,30,120,0.3));border-color:rgba(120,180,255,0.4);">
+            <p style="text-align:center;font-size:12.5px;color:#c5e2f5;font-weight:600;" contenteditable="true">
+              ◈ جميع المكونات متوفرة تجارياً — قابلة للتصنيع في المملكة · يدعم المحتوى المحلي · يقلل الاعتماد على الاستيراد
+            </p>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 9: TARGETS + SCIENTIFIC NOTE ===== */
+    {
+      id:'s9', title:'الأهداف التصميمية',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">الأهداف التصميمية للنظام</h2>
+        <div class="sl-subtitle" contenteditable="true">Design Targets — To be validated experimentally</div>
+        <div class="sl-body">
+          <div class="grid-4">
+            <div class="metric green">
+              <div class="v">7.2-7.8</div>
+              <div class="l">COP مستهدف<br><span style="font-size:9px;opacity:0.7;">(مقابل 2.2-3.8 للتقليدي)</span></div>
+            </div>
+            <div class="metric">
+              <div class="v">70-80%</div>
+              <div class="l">وفر كهرباء مستهدف</div>
+            </div>
+            <div class="metric purple">
+              <div class="v">25 سنة</div>
+              <div class="l">عمر تشغيلي مستهدف</div>
+            </div>
+            <div class="metric orange">
+              <div class="v">20-30 dB</div>
+              <div class="l">مستوى صوت مستهدف</div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px;border-color:rgba(120,180,255,0.5);">
+            <h3><span class="num">◈</span><span contenteditable="true" style="color:#ffd75c;">ملاحظة علمية مهمة</span></h3>
+            <p contenteditable="true" style="margin-top:8px;font-size:12.5px;line-height:1.8;">
+              الأرقام المتعلقة بحل Quantum Breeze تمثل <strong style="color:#7fe9ff;">أهدافاً تصميمية نظرية</strong> مستندة إلى حسابات هندسية مبدئية. سيتم التحقق منها تجريبياً عبر النموذج الأولي في المراحل القادمة.
+            </p>
+            <p contenteditable="true" style="margin-top:6px;font-size:11.5px;color:#8ab6d4;font-style:italic;">
+              نلتزم بالشفافية الكاملة أمام لجنة التحكيم.
+            </p>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 10: VISION 2030 ===== */
+    {
+      id:'s10', title:'التوافق مع رؤية 2030',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">التوافق مع رؤية 2030</h2>
+        <div class="sl-subtitle" contenteditable="true">Alignment with Saudi Vision 2030</div>
+        <div class="sl-body">
+          <div class="grid-3" style="flex:1;">
+            <div class="card" style="border-right:4px solid #7fe9ff;">
+              <h3><span class="num">◈</span><span contenteditable="true">مدن ذكية ومستدامة</span></h3>
+              <p contenteditable="true" style="margin-top:4px;">حل تقني متوافق مع برامج المدن الذكية</p>
+            </div>
+            <div class="card" style="border-right:4px solid #5cffb0;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#2ad8a0,#1a8a60);">◈</span><span contenteditable="true">كفاءة الطاقة</span></h3>
+              <p contenteditable="true" style="margin-top:4px;">دعم برامج كفاءة الطاقة الوطنية</p>
+            </div>
+            <div class="card" style="border-right:4px solid #c48bff;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#a06bff,#6a3a9f);">◈</span><span contenteditable="true">المحتوى المحلي</span></h3>
+              <p contenteditable="true" style="margin-top:4px;">تصنيع محلي وتقليل الاعتماد على الاستيراد</p>
+            </div>
+            <div class="card" style="border-right:4px solid #ffd75c;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#e0a020,#a87020);">◈</span><span contenteditable="true">الاستدامة البيئية</span></h3>
+              <p contenteditable="true" style="margin-top:4px;">صفر انبعاثات من غازات التبريد الضارة</p>
+            </div>
+            <div class="card" style="border-right:4px solid #ff8a5c;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#ff8a5c,#c05a2a);">◈</span><span contenteditable="true">الابتكار الهندسي</span></h3>
+              <p contenteditable="true" style="margin-top:4px;">نموذج تكاملي غير مسبوق عالمياً</p>
+            </div>
+            <div class="card" style="border-right:4px solid #a06bff;">
+              <h3><span class="num" style="background:linear-gradient(135deg,#a06bff,#6a3a9f);">◈</span><span contenteditable="true">تنويع الاقتصاد</span></h3>
+              <p contenteditable="true" style="margin-top:4px;">إتاحة فرصة صناعية جديدة في المملكة</p>
+            </div>
+          </div>
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 11: ROADMAP ===== */
+    {
+      id:'s11', title:'الجدول الزمني',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">الجدول الزمني للتطوير</h2>
+        <div class="sl-subtitle" contenteditable="true">Development Roadmap — 4 مراحل على مدى 5 سنوات</div>
+        <div class="sl-body">
+          ${[
+            ['2026','نموذج مخبري مصغّر','بناء النموذج الأولي وقياس ΔT عبر مراحل النظام','#5ff2ff'],
+            ['2026-2027','تجربة ميدانية','تطبيق على مبنى حكومي وقياس الوفر الفعلي','#7fe9ff'],
+            ['2029','توسيع التطبيقات','معايرة العتبات والتوسع لأنظمة أكبر','#c48bff'],
+            ['2030+','منصة سحابية','ربط شبكي لعدة مدن عبر منصة IoT/AI','#ffd75c']
+          ].map(([y,t,d,c]) => `
+            <div style="display:flex;align-items:center;gap:14px;padding:12px 18px;border-radius:10px;
+                        background:linear-gradient(150deg,rgba(14,36,60,0.55),rgba(8,20,38,0.4));
+                        border-right:4px solid ${c};border-top:1px solid rgba(80,200,255,0.1);margin-bottom:8px;">
+              <div style="flex-shrink:0;min-width:88px;font-size:14px;font-weight:900;color:${c};" contenteditable="true">${y}</div>
+              <div style="flex:1;">
+                <div style="font-size:13.5px;font-weight:800;color:${c};margin-bottom:3px;" contenteditable="true">${t}</div>
+                <div style="font-size:11.5px;color:#b0cbe0;line-height:1.5;" contenteditable="true">${d}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `
+    },
+
+    /* ===== SLIDE 12: TEAM & CONTACT ===== */
+    {
+      id:'s12', title:'الفريق والتواصل',
+      render: () => `
+        <h2 class="sl-title" contenteditable="true">الفريق والتواصل</h2>
+        <div class="sl-subtitle" contenteditable="true">فريق متعدد التخصصات بخبرة عملية في HVAC والهندسة المدنية</div>
+
+        <div class="team-grid" style="margin-top:6px;">
+          <div class="team-card">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="avatar">أح</div>
+              <div>
+                <div class="name" contenteditable="true">م. أحمد علي بوكر نسيب العقيلي</div>
+                <div class="role" contenteditable="true">مهندس ميكانيكي · HVAC</div>
+              </div>
+            </div>
+            <div class="info-list">
+              <div class="info-item"><span class="ic2">🏢</span><span><strong style="color:#7fe9ff;">مقر العمل:</strong> <span contenteditable="true">تجمع الصحي بجازان</span></span></div>
+              <div class="info-item"><span class="ic2">📱</span><span><strong style="color:#7fe9ff;">الجوال:</strong> <span contenteditable="true" dir="ltr">0507426388</span></span></div>
+              <div class="info-item"><span class="ic2">✉</span><span><strong style="color:#7fe9ff;">الإيميل:</strong> <span contenteditable="true" dir="ltr">Eng.ahmad.2011bokar@gmail.com</span></span></div>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div class="avatar" style="background:linear-gradient(135deg,#a06bff,#2aa8ff);">عز</div>
+              <div>
+                <div class="name" contenteditable="true">م. عبدالرحمن زين يحيى صهلولي المنيفي</div>
+                <div class="role" contenteditable="true">مهندس مدني</div>
+              </div>
+            </div>
+            <div class="info-list">
+              <div class="info-item"><span class="ic2">🏢</span><span><strong style="color:#7fe9ff;">مقر العمل:</strong> <span contenteditable="true">إدارة مشاريع أرامكو</span></span></div>
+              <div class="info-item"><span class="ic2">📱</span><span><strong style="color:#7fe9ff;">الجوال:</strong> <span contenteditable="true" dir="ltr">+966 50 275 5666</span></span></div>
+              <div class="info-item"><span class="ic2">✉</span><span><strong style="color:#7fe9ff;">الإيميل:</strong> <span contenteditable="true" dir="ltr">azys313@gmail.com</span></span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px;text-align:center;background:linear-gradient(150deg,rgba(40,100,160,0.35),rgba(60,30,120,0.3));border-color:rgba(120,180,255,0.4);">
+          <p style="font-size:13px;color:#c5e2f5;line-height:1.6;" contenteditable="true">
+            <strong style="color:#7fe9ff;">◈ Quantum Breeze</strong> — نحو تكييف يعمل مع الطبيعة لا ضدها، ومدن سعودية ذكية ومستدامة تدعم رؤية 2030.
+          </p>
+        </div>
+      `
+    }
+  ]
+};
+
+/* ================================================================
+   STATE + PERSISTENCE
+   ================================================================ */
+const STORAGE_KEY = 'quantum_breeze_pitch_v1';
+['quantum_breeze_pitch_v0'].forEach(k => { try { localStorage.removeItem(k); } catch(e){} });
+
+let DATA = { slides: DEFAULT_DATA.slides.map(s => Object.assign({}, s)) };
+let currentSlide = 0;
+let editing = false;
+let SLIDE_HTML = {};
+
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (parsed && parsed.edits && typeof parsed.edits === 'object') {
+      Object.keys(parsed.edits).forEach(key => {
+        const val = parsed.edits[key];
+        if (typeof val === 'string' && val.trim().length > 120 && !val.includes('Slide render error')) {
+          SLIDE_HTML[key] = val;
+        }
+      });
+    }
+    if (typeof parsed.currentSlide === 'number') {
+      currentSlide = Math.max(0, Math.min(DATA.slides.length - 1, parsed.currentSlide));
+    }
+  } catch(e) { console.warn('load failed', e); }
+}
+
+function saveToStorage() {
+  try {
+    const payload = { edits: SLIDE_HTML, currentSlide, savedAt: Date.now() };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    flashSaved();
+  } catch(e) { console.warn('save failed', e); }
+}
+
+function flashSaved() {
+  const el = document.getElementById('saveStatusText');
+  if (!el) return;
+  el.textContent = 'تم الحفظ';
+  clearTimeout(flashSaved._h);
+  flashSaved._h = setTimeout(() => { el.textContent = 'تم الحفظ'; }, 900);
+}
+
+/* ================================================================
+   RENDER
+   ================================================================ */
+function renderSlide() {
+  const slide = DATA.slides[currentSlide];
+  const el = document.getElementById('slideContent');
+  if (!slide || !el) return;
+
+  try {
+    if (SLIDE_HTML[slide.id]) {
+      el.innerHTML = SLIDE_HTML[slide.id];
+    } else {
+      el.innerHTML = typeof slide.render === 'function' ? slide.render() : '';
+    }
+  } catch(err) {
+    console.error('Slide render error:', err);
+    el.innerHTML = `<h2 class="sl-title">خطأ في العرض: ${err.message}</h2>`;
+  }
+
+  // Badge + Brand
+  const numBadge = document.createElement('div');
+  numBadge.className = 'slide-num-badge';
+  numBadge.textContent = String(currentSlide + 1).padStart(2,'0') + ' / ' + String(DATA.slides.length).padStart(2,'0');
+  el.appendChild(numBadge);
+
+  const brand = document.createElement('div');
+  brand.className = 'slide-brand';
+  brand.textContent = 'QUANTUM BREEZE';
+  el.appendChild(brand);
+
+  // Editable state
+  el.querySelectorAll('[contenteditable]').forEach(e => {
+    e.setAttribute('contenteditable', editing ? 'true' : 'false');
+  });
+
+  // Progress
+  const pf = document.getElementById('progressFill');
+  if (pf) pf.style.width = ((currentSlide + 1) / DATA.slides.length * 100) + '%';
+
+  // Nav
+  document.getElementById('curNum').textContent = currentSlide + 1;
+  document.getElementById('totalNum').textContent = DATA.slides.length;
+  document.getElementById('navFirst').disabled = currentSlide === 0;
+  document.getElementById('navPrev').disabled = currentSlide === 0;
+  document.getElementById('navNext').disabled = currentSlide === DATA.slides.length - 1;
+  document.getElementById('navLast').disabled = currentSlide === DATA.slides.length - 1;
+
+  // Sidebar active
+  document.querySelectorAll('.sb-item').forEach((it, i) => {
+    it.classList.toggle('active', i === currentSlide);
+  });
+
+  // Fade
+  el.style.animation = 'none';
+  void el.offsetHeight;
+  el.style.animation = 'slideFadeIn .45s ease';
+}
+
+function buildSidebar() {
+  const list = document.getElementById('sbList');
+  list.innerHTML = '';
+  DATA.slides.forEach((s, i) => {
+    const it = document.createElement('div');
+    it.className = 'sb-item' + (i === currentSlide ? ' active' : '');
+    it.innerHTML = `<div class="num">${String(i+1).padStart(2,'0')}</div><div class="t">${s.title}</div>`;
+    it.onclick = () => { goToSlide(i); closeSidebar(); };
+    list.appendChild(it);
+  });
+}
+
+/* ================================================================
+   NAVIGATION
+   ================================================================ */
+function captureCurrentSlideEdits() {
+  if (!editing) return;
+  const slide = DATA.slides[currentSlide];
+  const el = document.getElementById('slideContent');
+  if (el && slide) {
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll('.slide-num-badge, .slide-brand').forEach(n => n.remove());
+    const html = clone.innerHTML;
+    if (html && html.trim().length > 120) SLIDE_HTML[slide.id] = html;
+  }
+}
+
+function goToSlide(i) {
+  captureCurrentSlideEdits();
+  saveToStorage();
+  currentSlide = Math.max(0, Math.min(DATA.slides.length - 1, i));
+  renderSlide();
+  buildSidebar();
+}
+
+function nextSlide() { goToSlide(currentSlide + 1); }
+function prevSlide() { goToSlide(currentSlide - 1); }
+
+document.getElementById('navFirst').onclick = () => goToSlide(0);
+document.getElementById('navPrev').onclick = prevSlide;
+document.getElementById('navNext').onclick = nextSlide;
+document.getElementById('navLast').onclick = () => goToSlide(DATA.slides.length - 1);
+
+document.addEventListener('keydown', (e) => {
+  if (editing && e.target.matches('[contenteditable="true"]')) return;
+  if (e.key === 'ArrowLeft') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Home') goToSlide(0);
+  if (e.key === 'End') goToSlide(DATA.slides.length - 1);
+  if (e.key === 'F5') { e.preventDefault(); enterEditMode(); }
+  if (e.key === 'Escape' && editing) exitEditMode();
+});
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+const sidebar = document.getElementById('sidebar');
+function closeSidebar() { sidebar.classList.remove('open'); }
+document.getElementById('btnSidebar').onclick = () => sidebar.classList.toggle('open');
+document.getElementById('sbClose').onclick = closeSidebar;
+
+/* ================================================================
+   EDIT MODE
+   ================================================================ */
+function enterEditMode() {
+  editing = true;
+  document.body.classList.add('editing');
+  document.getElementById('btnEdit').classList.add('primary');
+  document.getElementById('btnEdit').textContent = '✓ حفظ التحرير';
+  renderSlide();
+  toast('وضع التحرير مُفعّل — انقر أي نص لتعديله', 'success');
+}
+function exitEditMode() {
+  captureCurrentSlideEdits();
+  editing = false;
+  document.body.classList.remove('editing');
+  document.getElementById('btnEdit').classList.remove('primary');
+  document.getElementById('btnEdit').textContent = '✎ تحرير';
+  saveToStorage();
+  renderSlide();
+  toast('تم حفظ التعديلات', 'success');
+}
+document.getElementById('btnEdit').onclick = () => {
+  if (editing) exitEditMode(); else enterEditMode();
+};
+
+document.addEventListener('input', (e) => {
+  if (editing && e.target.matches('[contenteditable="true"]')) {
+    clearTimeout(window._autoSaveH);
+    window._autoSaveH = setTimeout(() => { captureCurrentSlideEdits(); saveToStorage(); }, 700);
+  }
+});
+
+/* ================================================================
+   RESET
+   ================================================================ */
+document.getElementById('btnReset').onclick = () => {
+  if (!confirm('هل تريد استعادة النسخة الأصلية؟ سيتم فقدان جميع التعديلات.')) return;
+  SLIDE_HTML = {};
+  localStorage.removeItem(STORAGE_KEY);
+  DATA = { slides: DEFAULT_DATA.slides.map(s => Object.assign({}, s)) };
+  currentSlide = 0;
+  editing = false;
+  document.body.classList.remove('editing');
+  document.getElementById('btnEdit').classList.remove('primary');
+  document.getElementById('btnEdit').textContent = '✎ تحرير';
+  renderSlide();
+  buildSidebar();
+  toast('تمت استعادة النسخة الأصلية', 'success');
+};
+
+/* ================================================================
+   EXPORT / IMPORT JSON
+   ================================================================ */
+document.getElementById('btnSaveJSON').onclick = () => {
+  captureCurrentSlideEdits();
+  const payload = { slides: DATA.slides.map(s => ({ id: s.id, title: s.title })), edits: SLIDE_HTML, savedAt: new Date().toISOString() };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Quantum_Breeze_Pitch_${Date.now()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('تم حفظ النسخة', 'success');
+};
+
+document.getElementById('btnLoadJSON').onclick = () => { document.getElementById('fileInput').click(); };
+document.getElementById('fileInput').onchange = (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      if (parsed.edits) {
+        SLIDE_HTML = parsed.edits;
+        saveToStorage();
+        renderSlide();
+        toast('تم تحميل المشروع بنجاح', 'success');
+      }
+    } catch(err) { toast('ملف غير صالح', 'error'); }
+  };
+  reader.readAsText(f);
+};
+
+/* ================================================================
+   EXPORT PDF
+   ================================================================ */
+document.getElementById('btnPDF').onclick = async () => {
+  toast('جاري تجهيز PDF...');
+  captureCurrentSlideEdits();
+  const original = currentSlide;
+  const container = document.createElement('div');
+  container.style.cssText = 'position:fixed;left:-99999px;top:0;width:1280px;background:#071220;';
+  document.body.appendChild(container);
+
+  DATA.slides.forEach((s, i) => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'width:1280px;height:720px;position:relative;background:linear-gradient(140deg,#071220,#0a1c32 55%,#071220);color:#e8f4ff;overflow:hidden;page-break-after:always;';
+    const inner = document.createElement('div');
+    inner.style.cssText = 'position:absolute;inset:0;padding:40px 55px;display:flex;flex-direction:column;color:#e8f4ff;font-family:Tajawal,sans-serif;';
+    inner.innerHTML = SLIDE_HTML[s.id] || (typeof s.render === 'function' ? s.render() : '');
+    const badge = document.createElement('div');
+    badge.style.cssText = 'position:absolute;bottom:16px;left:28px;font-size:11px;color:#5a86a8;letter-spacing:1.5px;font-weight:700;';
+    badge.textContent = String(i+1).padStart(2,'0') + ' / ' + String(DATA.slides.length).padStart(2,'0');
+    inner.appendChild(badge);
+    const brand = document.createElement('div');
+    brand.style.cssText = 'position:absolute;bottom:16px;right:28px;font-size:10.5px;color:#4a7ea0;letter-spacing:.6px;';
+    brand.textContent = 'QUANTUM BREEZE';
+    inner.appendChild(brand);
+    wrap.appendChild(inner);
+    container.appendChild(wrap);
+  });
+
+  const opt = {
+    margin: 0,
+    filename: 'Quantum_Breeze_Pitch.pdf',
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, backgroundColor: '#071220', width: 1280, height: 720 },
+    jsPDF: { unit: 'px', format: [1280, 720], orientation: 'landscape' },
+    pagebreak: { mode: ['css', 'legacy'] }
+  };
+  try {
+    await html2pdf().set(opt).from(container).save();
+    toast('تم تصدير PDF بنجاح', 'success');
+  } catch(err) {
+    console.error(err);
+    toast('خطأ في التصدير: ' + err.message, 'error');
+  } finally {
+    document.body.removeChild(container);
+  }
+};
+
+/* ================================================================
+   EXPORT PPTX
+   ================================================================ */
+document.getElementById('btnPPTX').onclick = async () => {
+  toast('جاري تجهيز PowerPoint...');
+  captureCurrentSlideEdits();
+  try {
+    const pptx = new PptxGenJS();
+    pptx.layout = 'LAYOUT_16x9';
+    pptx.title = 'Quantum Breeze — Pitch Deck';
+    pptx.author = 'م. أحمد علي بوكر نسيب العقيلي';
+    pptx.subject = 'نظام تكييف مركزي بدون ضاغط وبدون غاز تبريد';
+    pptx.company = 'IECE 2026';
+    pptx.lang = 'ar-SA';
+    pptx.rtlMode = true;
+
+    const BG = '060A14', TC = '7FE9FF', TX = 'C5DDEF', AC = '2AA8FF';
+    const addSlide = (title, subtitle) => {
+      const s = pptx.addSlide();
+      s.background = { color: BG };
+      s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:'100%', h:0.06, fill:{ color:AC } });
+      s.addShape(pptx.ShapeType.rect, { x:0, y:5.56, w:'100%', h:0.07, fill:{ color:AC } });
+      if (title) {
+        s.addText(title, { x:0.4, y:0.3, w:9.2, h:0.65, fontSize:24, bold:true, color:TC, align:'right', fontFace:'Tajawal' });
+        s.addShape(pptx.ShapeType.rect, { x:8.9, y:0.95, w:0.7, h:0.04, fill:{ color:AC } });
+      }
+      if (subtitle) s.addText(subtitle, { x:0.4, y:1.0, w:9.2, h:0.3, fontSize:11, color:'8AB6D4', align:'right', fontFace:'Tajawal' });
+      return s;
+    };
+    const addFooter = (slide, num) => {
+      slide.addText('QUANTUM BREEZE — IECE 2026', { x:0.3, y:5.32, w:4, h:0.2, fontSize:8, color:'4A7EA0', align:'left', fontFace:'Tajawal' });
+      slide.addText(`${num} / 12`, { x:8.5, y:5.32, w:1, h:0.2, fontSize:8, color:'5A86A8', align:'right', fontFace:'Tajawal', bold:true });
+    };
+
+    /* SLIDE 1 */
+    {
+      const s = pptx.addSlide();
+      s.background = { color: '050A14' };
+      s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:'100%', h:0.12, fill:{ color:'3AA8FF' } });
+      s.addShape(pptx.ShapeType.rect, { x:0, y:5.5, w:'100%', h:0.12, fill:{ color:'A06BFF' } });
+      s.addText('مسابقة الهيئة السعودية للمهندسين · IECE 2026', { x:0, y:0.5, w:'100%', h:0.3, fontSize:11, color:TC, align:'center', fontFace:'Tajawal', bold:true });
+      s.addText('QUANTUM BREEZE', { x:0, y:1.3, w:'100%', h:1.1, fontSize:60, bold:true, color:'5FF2FF', align:'center', fontFace:'Tajawal' });
+      s.addText('نظام تكييف مركزي متكامل بدون ضاغط وبدون غاز تبريد', { x:0, y:2.5, w:'100%', h:0.4, fontSize:16, color:'B0CBE0', align:'center', fontFace:'Tajawal' });
+      s.addShape(pptx.ShapeType.rect, { x:3.5, y:3.0, w:3, h:0.03, fill:{ color:AC } });
+      s.addText('تكامل خمس تقنيات متقدمة في منظومة واحدة ذات تفاعل تآزري', { x:0, y:3.15, w:'100%', h:0.35, fontSize:12, color:'8AB6D4', align:'center', fontFace:'Tajawal' });
+
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:3.9, w:4.35, h:1.35, fill:{ color:'0E2440' }, line:{ color:'4FD0FF', width:0.8 }, rectRadius:0.08 });
+      s.addText('مقدم الفكرة', { x:5.3, y:4.0, w:4.05, h:0.22, fontSize:9, color:'6A9EC0', align:'right', fontFace:'Tajawal' });
+      s.addText('م. أحمد علي بوكر نسيب العقيلي', { x:5.3, y:4.22, w:4.05, h:0.3, fontSize:12, bold:true, color:'fff', align:'right', fontFace:'Tajawal' });
+      s.addText('مهندس ميكانيكي · HVAC', { x:5.3, y:4.55, w:4.05, h:0.25, fontSize:9.5, color:TC, align:'right', fontFace:'Tajawal' });
+      s.addText('تجمع الصحي بجازان', { x:5.3, y:4.85, w:4.05, h:0.3, fontSize:9, color:TX, align:'right', fontFace:'Tajawal' });
+
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:3.9, w:4.35, h:1.35, fill:{ color:'0E2440' }, line:{ color:'C48BFF', width:0.8 }, rectRadius:0.08 });
+      s.addText('شريك التطوير', { x:0.65, y:4.0, w:4.05, h:0.22, fontSize:9, color:'6A9EC0', align:'right', fontFace:'Tajawal' });
+      s.addText('م. عبدالرحمن زين يحيى صهلولي المنيفي', { x:0.65, y:4.22, w:4.05, h:0.3, fontSize:11, bold:true, color:'fff', align:'right', fontFace:'Tajawal' });
+      s.addText('مهندس مدني', { x:0.65, y:4.55, w:4.05, h:0.25, fontSize:9.5, color:'C48BFF', align:'right', fontFace:'Tajawal' });
+      s.addText('إدارة مشاريع أرامكو', { x:0.65, y:4.85, w:4.05, h:0.3, fontSize:9, color:TX, align:'right', fontFace:'Tajawal' });
+    }
+
+    /* SLIDE 2 */
+    {
+      const s = addSlide('المشكلة — أرقام موثقة علمياً', 'Verified numbers from official sources — IPCC · كفاءة · CARB');
+      const metrics = [
+        { v:'50-70%', l:'من كهرباء المبنى للتكييف (كفاءة)', c:'FFB066' },
+        { v:'×2088', l:'GWP لغاز R-410A (IPCC)', c:'C48BFF' },
+        { v:'1.8-5%', l:'معدل التسريب السنوي (CARB)', c:'5FF2FF' }
+      ];
+      metrics.forEach((m, i) => {
+        const x = 8.9 - i * 3.05;
+        s.addShape(pptx.ShapeType.roundRect, { x:x-2.85, y:1.4, w:2.9, h:1.0, fill:{ color:'0E2440' }, line:{ color:m.c, width:0.75 }, rectRadius:0.07 });
+        s.addText(m.v, { x:x-2.85, y:1.5, w:2.9, h:0.5, fontSize:24, bold:true, color:m.c, align:'center', fontFace:'Tajawal' });
+        s.addText(m.l, { x:x-2.85, y:2.05, w:2.9, h:0.3, fontSize:9, color:'8AB6D4', align:'center', fontFace:'Tajawal' });
+      });
+
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:2.6, w:4.35, h:2.7, fill:{ color:'0A1C32' }, line:{ color:'FF8A5C', width:0.7 }, rectRadius:0.09 });
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:2.6, w:4.35, h:0.08, fill:{ color:'FF8A5C' }, rectRadius:0.04 });
+      s.addText('✕  مشاكل الأنظمة التقليدية', { x:5.3, y:2.75, w:4.1, h:0.35, fontSize:14, bold:true, color:'FF8A5C', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'• استهلاك مرتفع للكهرباء\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• انبعاثات HFCs ضارة (GWP 1,400-4,000)\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• ضوضاء 60-75 dB\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• عمر قصير (10-15 سنة)\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• صيانة متكررة مرتفعة', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } }
+      ], { x:5.3, y:3.2, w:4.1, h:2.0, align:'right', lineSpacingMultiple:1.5 });
+
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:2.6, w:4.35, h:2.7, fill:{ color:'0A1C32' }, line:{ color:'5CFFB0', width:0.7 }, rectRadius:0.09 });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:2.6, w:4.35, h:0.08, fill:{ color:'5CFFB0' }, rectRadius:0.04 });
+      s.addText('✓  الفجوة في السوق', { x:0.65, y:2.75, w:4.1, h:0.35, fontSize:14, bold:true, color:'5CFFB0', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'• كل تقنية معروفة منفردة\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• لا يوجد نظام تجاري واحد\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• يدمج التقنيات الخمس\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• في منظومة متكاملة\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'• هذا هو تمايز Quantum Breeze', options:{ fontSize:11, color:'5CFFB0', bold:true, fontFace:'Tajawal' } }
+      ], { x:0.65, y:3.2, w:4.1, h:2.0, align:'right', lineSpacingMultiple:1.5 });
+      addFooter(s, 2);
+    }
+
+    /* SLIDE 3 */
+    {
+      const s = addSlide('الحل — خمس تقنيات في منظومة واحدة', 'Five integrated technologies with synergistic interaction');
+      const techs = [
+        { n:'1', t:'تبريد إشعاعي فضائي', c:'C48BFF' },
+        { n:'2', t:'تجفيف شمسي', c:'7FE9FF' },
+        { n:'3', t:'تبريد مغناطيسي', c:'FF8A5C' },
+        { n:'4', t:'تخزين PCM', c:'5CFFB0' },
+        { n:'5', t:'تحكم AI', c:'FFD75C' }
+      ];
+      techs.forEach((t, i) => {
+        const x = 8.9 - i * 1.83;
+        s.addShape(pptx.ShapeType.roundRect, { x:x-1.7, y:1.7, w:1.75, h:2.6, fill:{ color:'0E2440' }, line:{ color:t.c, width:0.75 }, rectRadius:0.09 });
+        s.addShape(pptx.ShapeType.roundRect, { x:x-0.55, y:1.85, w:0.45, h:0.45, fill:{ color:t.c }, rectRadius:0.06 });
+        s.addText(t.n, { x:x-0.55, y:1.9, w:0.45, h:0.4, fontSize:16, bold:true, color:'031020', align:'center', fontFace:'Tajawal' });
+        s.addText(t.t, { x:x-1.65, y:2.5, w:1.65, h:1.7, fontSize:11, bold:true, color:t.c, align:'center', fontFace:'Tajawal', lineSpacingMultiple:1.4 });
+      });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:4.5, w:9, h:0.85, fill:{ color:'1A3D66' }, line:{ color:'7FB8FF', width:0.7 }, rectRadius:0.08 });
+      s.addText('◈  التفاعل التآزري — الميزة الجوهرية', { x:0.65, y:4.6, w:8.7, h:0.3, fontSize:12, bold:true, color:TC, align:'right', fontFace:'Tajawal' });
+      s.addText('التجفيف يمنع الجليد على AMR ← الإشعاع يشحن PCM ← PCM يستقر الحرارة ← AI يوفر 15-25% إضافية', { x:0.65, y:4.9, w:8.7, h:0.4, fontSize:10, color:TX, align:'right', fontFace:'Tajawal' });
+      addFooter(s, 3);
+    }
+
+    /* SLIDE 4 */
+    {
+      const s = addSlide('التقنية 1 — التجفيف الشمسي', 'Solar Desiccant Dehumidification');
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:1.4, w:4.35, h:3.9, fill:{ color:'0A1C32' }, line:{ color:'7FE9FF', width:0.75 }, rectRadius:0.08 });
+      s.addText('⚙  الوصف التقني', { x:5.3, y:1.5, w:4.1, h:0.35, fontSize:13, bold:true, color:TC, align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'• عجلة سيليكا جل دوارة\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• امتصاص الرطوبة من الهواء\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• تجديد بحرارة الشمس 60-80 °C\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• خفض الرطوبة حتى 40%\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• استهلاك كهربائي منخفض جداً', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } }
+      ], { x:5.3, y:1.9, w:4.1, h:3.3, align:'right', lineSpacingMultiple:1.7 });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:1.4, w:4.35, h:3.9, fill:{ color:'0A1C32' }, line:{ color:'5CFFB0', width:0.5 }, rectRadius:0.08 });
+      s.addText('🎯  الميزة في Quantum Breeze', { x:0.65, y:1.5, w:4.1, h:0.35, fontSize:13, bold:true, color:'5CFFB0', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'خفض الحمل الكامن قبل مرحلة التبريد يمنع تكوّن الجليد على سطح AMR في المبرد المغناطيسي.\n\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'هذا التفاعل التآزري يُتوقع أن يرفع كفاءة الدورة المغناطيسية بنسبة تصل إلى 18%.', options:{ fontSize:11, color:'5CFFB0', bold:true, fontFace:'Tajawal' } },
+        { text:'\n\n(هدف تصميمي يخضع للتحقق التجريبي)', options:{ fontSize:9, color:'8AB6D4', italic:true, fontFace:'Tajawal' } }
+      ], { x:0.65, y:1.9, w:4.1, h:3.3, align:'right', lineSpacingMultiple:1.6 });
+      addFooter(s, 4);
+    }
+
+    /* SLIDE 5 */
+    {
+      const s = addSlide('التقنية 2 — التبريد المغناطيسي', 'Magnetocaloric Cooling');
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:1.4, w:4.35, h:3.9, fill:{ color:'0A1C32' }, line:{ color:'FF8A5C', width:0.75 }, rectRadius:0.08 });
+      s.addText('⚙  الوصف التقني', { x:5.3, y:1.5, w:4.1, h:0.35, fontSize:13, bold:true, color:'FF8A5C', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'• مادة Gd-Si-Ge في المجدد AMR\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• مجال مغناطيسي 0.8-1.5 تسلا\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• دوران 60-120 دورة/دقيقة\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• ΔT للدورة ~12 °C\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• لا ضاغط · لا غاز تبريد · صفر HFCs', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } }
+      ], { x:5.3, y:1.9, w:4.1, h:3.3, align:'right', lineSpacingMultiple:1.65 });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:1.4, w:4.35, h:3.9, fill:{ color:'0A1C32' }, line:{ color:'5CFFB0', width:0.5 }, rectRadius:0.08 });
+      s.addText('🎯  الميزة في Quantum Breeze', { x:0.65, y:1.5, w:4.1, h:0.35, fontSize:13, bold:true, color:'5CFFB0', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'استبدال كامل لدورة الانضغاط البخاري.\n\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'صفر انبعاثات من غازات التبريد → GWP = 0 بدل 2,088 لـ R-410A.\n\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'المجدد المغناطيسي النشط (AMR) يعمل بتقنية طبقات مكدّسة تُعزز نقل الحرارة.', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } }
+      ], { x:0.65, y:1.9, w:4.1, h:3.3, align:'right', lineSpacingMultiple:1.55 });
+      addFooter(s, 5);
+    }
+
+    /* SLIDE 6 */
+    {
+      const s = addSlide('التقنية 3 و 4 — PCM والإشعاع الفضائي', 'PCM Thermal Storage + Passive Radiative Cooling');
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:1.4, w:4.35, h:3.9, fill:{ color:'0A1C32' }, line:{ color:'5CFFB0', width:0.75 }, rectRadius:0.08 });
+      s.addText('❄  خزان PCM', { x:5.3, y:1.5, w:4.1, h:0.35, fontSize:13, bold:true, color:'5CFFB0', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'• مادة متغيرة الطور RT-12\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• حرارة انصهار 12 °C\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• شحن ليلي ← تفريغ نهاري\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• هدف خفض الذروة 50%\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• هدف استقرار حراري 60%', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } }
+      ], { x:5.3, y:1.9, w:4.1, h:3.3, align:'right', lineSpacingMultiple:1.7 });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:1.4, w:4.35, h:3.9, fill:{ color:'0A1C32' }, line:{ color:'C48BFF', width:0.75 }, rectRadius:0.08 });
+      s.addText('☀  التبريد الإشعاعي الفضائي', { x:0.65, y:1.5, w:4.1, h:0.35, fontSize:13, bold:true, color:'C48BFF', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'• نافذة 8-13 ميكرومتر\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• إشعاع مباشر إلى الفضاء (3K)\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• قدرة مُقاسة: 70-157 W/m²\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• بدون أي استهلاك كهرباء\n', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } },
+        { text:'• مُثبت في دراسات محكمة (ACS)', options:{ fontSize:10.5, color:TX, fontFace:'Tajawal' } }
+      ], { x:0.65, y:1.9, w:4.1, h:3.3, align:'right', lineSpacingMultiple:1.7 });
+      addFooter(s, 6);
+    }
+
+    /* SLIDE 7 */
+    {
+      const s = addSlide('التقنية 5 — وحدة التحكم بالذكاء الاصطناعي', 'AI Control Unit');
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:1.4, w:9, h:3.9, fill:{ color:'0A1C32' }, line:{ color:'FFD75C', width:0.75 }, rectRadius:0.08 });
+      s.addText('◆  الوظائف الأساسية', { x:0.7, y:1.5, w:8.6, h:0.35, fontSize:14, bold:true, color:'FFD75C', align:'right', fontFace:'Tajawal' });
+      s.addText([
+        { text:'١. قياس آني من 12 نقطة حرارة ورطوبة موزعة على مراحل النظام.\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'٢. التنبؤ بذروة الطلب باستخدام نماذج تعلّم آلي.\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'٣. تحسين توزيع الطاقة والماء بين المراحل الخمس بشكل تكيفي.\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'٤. زمن الاستجابة أقل من ثانية.\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'٥. منصة سحابية لربط وإدارة شبكة من الأنظمة في عدة مبانٍ.\n', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } },
+        { text:'٦. التوأم الرقمي لمحاكاة الأداء والتنبؤ بالأعطال.', options:{ fontSize:11, color:TX, fontFace:'Tajawal' } }
+      ], { x:0.7, y:1.95, w:8.6, h:3.2, align:'right', lineSpacingMultiple:1.65 });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:5.4, w:9, h:0.35, fill:{ color:'1A3D66' }, rectRadius:0.05 });
+      s.addText('الهدف: وفر إضافي 15-25% فوق ما تحققه التقنيات الأربع الأخرى', { x:0.5, y:5.43, w:9, h:0.3, fontSize:10, bold:true, color:'5CFFB0', align:'center', fontFace:'Tajawal' });
+      addFooter(s, 7);
+    }
+
+    /* SLIDE 8 */
+    {
+      const s = addSlide('التصنيع المحلي — دعم المحتوى المحلي', 'Local Manufacturing — Vision 2030');
+      const items = [
+        { t:'مغناطيسات NdFeB', c:'7FE9FF' },
+        { t:'مادة Gd-Si-Ge', c:'FF8A5C' },
+        { t:'سيليكا جل', c:'5FF2FF' },
+        { t:'شمع برافيني RT-12', c:'5CFFB0' },
+        { t:'مكونات التحكم الإلكترونية', c:'FFD75C' },
+        { t:'الهياكل المعدنية والبلاستيكية', c:'C48BFF' }
+      ];
+      items.forEach((it, i) => {
+        const col = i % 3, row = Math.floor(i / 3);
+        const x = 8.9 - col * 3.05;
+        const y = 1.5 + row * 1.4;
+        s.addShape(pptx.ShapeType.roundRect, { x:x-2.85, y:y, w:2.9, h:1.2, fill:{ color:'0E2440' }, line:{ color:it.c, width:0.7 }, rectRadius:0.08 });
+        s.addText('◈', { x:x-2.85, y:y+0.05, w:2.9, h:0.35, fontSize:18, color:it.c, align:'center', fontFace:'Tajawal' });
+        s.addText(it.t, { x:x-2.85, y:y+0.45, w:2.9, h:0.65, fontSize:11, bold:true, color:it.c, align:'center', fontFace:'Tajawal', lineSpacingMultiple:1.3 });
+      });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:4.4, w:9, h:1.0, fill:{ color:'1A3D66' }, line:{ color:'7FB8FF', width:0.7 }, rectRadius:0.08 });
+      s.addText('◈  جميع المكونات متوفرة تجارياً — قابلة للتصنيع في المملكة', { x:0.65, y:4.5, w:8.7, h:0.32, fontSize:12, bold:true, color:TC, align:'right', fontFace:'Tajawal' });
+      s.addText('يدعم المحتوى المحلي · يقلل الاعتماد على الاستيراد · يتوافق مع رؤية 2030', { x:0.65, y:4.85, w:8.7, h:0.4, fontSize:11, color:TX, align:'right', fontFace:'Tajawal' });
+      addFooter(s, 8);
+    }
+
+    /* SLIDE 9 */
+    {
+      const s = addSlide('الأهداف التصميمية للنظام', 'Design Targets — To be validated experimentally');
+      const metrics = [
+        { v:'7.2-7.8', l:'COP مستهدف (مقابل 2.2-3.8)', c:'5CFFB0' },
+        { v:'70-80%', l:'وفر كهرباء مستهدف', c:'7FE9FF' },
+        { v:'25 سنة', l:'عمر تشغيلي مستهدف', c:'C48BFF' },
+        { v:'20-30 dB', l:'مستوى صوت مستهدف', c:'FFD75C' }
+      ];
+      metrics.forEach((m, i) => {
+        const x = 8.9 - i * 2.25;
+        s.addShape(pptx.ShapeType.roundRect, { x:x-2.05, y:1.6, w:2.1, h:1.5, fill:{ color:'0E2440' }, line:{ color:m.c, width:0.75 }, rectRadius:0.08 });
+        s.addText(m.v, { x:x-2.05, y:1.7, w:2.1, h:0.7, fontSize:20, bold:true, color:m.c, align:'center', fontFace:'Tajawal' });
+        s.addText(m.l, { x:x-2.05, y:2.45, w:2.1, h:0.6, fontSize:9, color:'8AB6D4', align:'center', fontFace:'Tajawal', lineSpacingMultiple:1.3 });
+      });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:3.4, w:9, h:2.0, fill:{ color:'0A1C32' }, line:{ color:AC, width:0.6 }, rectRadius:0.08 });
+      s.addText('◈  ملاحظة علمية مهمة', { x:0.7, y:3.5, w:8.6, h:0.35, fontSize:13, bold:true, color:TC, align:'right', fontFace:'Tajawal' });
+      s.addText('الأرقام المتعلقة بحل Quantum Breeze تمثل أهدافاً تصميمية نظرية مستندة إلى حسابات هندسية مبدئية. سيتم التحقق منها تجريبياً عبر النموذج الأولي في المراحل القادمة. نلتزم بالشفافية الكاملة أمام لجنة التحكيم.', { x:0.7, y:3.9, w:8.6, h:1.4, fontSize:11, color:TX, align:'right', fontFace:'Tajawal', lineSpacingMultiple:1.6 });
+      addFooter(s, 9);
+    }
+
+    /* SLIDE 10 */
+    {
+      const s = addSlide('التوافق مع رؤية 2030', 'Alignment with Saudi Vision 2030');
+      const points = [
+        { t:'مدن ذكية ومستدامة', d:'حل تقني متوافق مع برامج المدن الذكية', c:'7FE9FF' },
+        { t:'كفاءة الطاقة', d:'دعم برامج كفاءة الطاقة الوطنية', c:'5CFFB0' },
+        { t:'المحتوى المحلي', d:'تصنيع محلي وتقليل الاعتماد على الاستيراد', c:'C48BFF' },
+        { t:'الاستدامة البيئية', d:'صفر انبعاثات من غازات التبريد الضارة', c:'FFD75C' },
+        { t:'الابتكار الهندسي', d:'نموذج تكاملي غير مسبوق عالمياً', c:'FF8A5C' },
+        { t:'تنويع الاقتصاد', d:'إتاحة فرصة صناعية جديدة في المملكة', c:'A06BFF' }
+      ];
+      points.forEach((p, i) => {
+        const col = i % 2, row = Math.floor(i / 2);
+        const x = col === 0 ? 5.15 : 0.5;
+        const y = 1.5 + row * 1.4;
+        s.addShape(pptx.ShapeType.roundRect, { x:x, y:y, w:4.35, h:1.2, fill:{ color:'0E2440' }, line:{ color:p.c, width:0.7 }, rectRadius:0.08 });
+        s.addText('◈  ' + p.t, { x:x+0.15, y:y+0.1, w:4.05, h:0.35, fontSize:12, bold:true, color:p.c, align:'right', fontFace:'Tajawal' });
+        s.addText(p.d, { x:x+0.15, y:y+0.5, w:4.05, h:0.6, fontSize:10, color:TX, align:'right', fontFace:'Tajawal', lineSpacingMultiple:1.35 });
+      });
+      addFooter(s, 10);
+    }
+
+    /* SLIDE 11 */
+    {
+      const s = addSlide('الجدول الزمني للتطوير', 'Development Roadmap');
+      const phases = [
+        ['2026','نموذج مخبري مصغّر','بناء النموذج الأولي وقياس ΔT','5FF2FF'],
+        ['2026-2027','تجربة ميدانية','تطبيق على مبنى حكومي وقياس الوفر','7FE9FF'],
+        ['2029','توسيع التطبيقات','معايرة العتبات والتوسع','C48BFF'],
+        ['2030+','منصة سحابية','ربط شبكي لعدة مدن','FFD75C']
+      ];
+      phases.forEach((p, i) => {
+        const y = 1.4 + i * 1.0;
+        s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:y, w:9, h:0.85, fill:{ color:'0A1C32' }, line:{ color:p[3], width:0.7 }, rectRadius:0.06 });
+        s.addShape(pptx.ShapeType.rect, { x:9.4, y:y, w:0.06, h:0.85, fill:{ color:p[3] } });
+        s.addText(p[0], { x:7.9, y:y+0.05, w:1.45, h:0.3, fontSize:12, bold:true, color:p[3], align:'right', fontFace:'Tajawal' });
+        s.addText(p[1], { x:5.1, y:y+0.05, w:2.7, h:0.3, fontSize:12, bold:true, color:p[3], align:'right', fontFace:'Tajawal' });
+        s.addText(p[2], { x:0.65, y:y+0.4, w:8.65, h:0.35, fontSize:10.5, color:TX, align:'right', fontFace:'Tajawal' });
+      });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:5.2, w:9, h:0.4, fill:{ color:'1A3D66' }, rectRadius:0.05 });
+      s.addText('الإجمالي: 4 مراحل تطويرية على مدى 5 سنوات', { x:0.5, y:5.23, w:9, h:0.35, fontSize:11, bold:true, color:TC, align:'center', fontFace:'Tajawal' });
+      addFooter(s, 11);
+    }
+
+    /* SLIDE 12 */
+    {
+      const s = pptx.addSlide();
+      s.background = { color: BG };
+      s.addShape(pptx.ShapeType.rect, { x:0, y:0, w:'100%', h:0.06, fill:{ color:AC } });
+      s.addShape(pptx.ShapeType.rect, { x:0, y:5.56, w:'100%', h:0.07, fill:{ color:AC } });
+      s.addText('الفريق والتواصل', { x:0, y:0.35, w:'100%', h:0.55, fontSize:24, bold:true, color:TC, align:'center', fontFace:'Tajawal' });
+
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:1.2, w:4.35, h:2.9, fill:{ color:'0E2440' }, line:{ color:'4FD0FF', width:0.8 }, rectRadius:0.09 });
+      s.addShape(pptx.ShapeType.roundRect, { x:5.15, y:1.2, w:4.35, h:0.08, fill:{ color:'2AA8FF' }, rectRadius:0.04 });
+      s.addText('م. أحمد علي بوكر نسيب العقيلي', { x:5.3, y:1.4, w:4.05, h:0.45, fontSize:14, bold:true, color:'fff', align:'right', fontFace:'Tajawal' });
+      s.addText('مهندس ميكانيكي · HVAC', { x:5.3, y:1.85, w:4.05, h:0.3, fontSize:10, color:TC, align:'right', fontFace:'Tajawal' });
+      s.addText('مقر العمل: تجمع الصحي بجازان', { x:5.3, y:2.2, w:4.05, h:0.3, fontSize:10.5, color:TX, align:'right', fontFace:'Tajawal' });
+      s.addText('الجوال: 0507426388', { x:5.3, y:2.55, w:4.05, h:0.3, fontSize:10.5, color:TX, align:'right', fontFace:'Tajawal' });
+      s.addText('Eng.ahmad.2011bokar@gmail.com', { x:5.3, y:2.9, w:4.05, h:0.3, fontSize:10, color:TX, align:'right', fontFace:'Tajawal' });
+
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:1.2, w:4.35, h:2.9, fill:{ color:'0E2440' }, line:{ color:'C48BFF', width:0.8 }, rectRadius:0.09 });
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:1.2, w:4.35, h:0.08, fill:{ color:'C48BFF' }, rectRadius:0.04 });
+      s.addText('م. عبدالرحمن زين يحيى صهلولي المنيفي', { x:0.65, y:1.4, w:4.05, h:0.45, fontSize:12.5, bold:true, color:'fff', align:'right', fontFace:'Tajawal' });
+      s.addText('مهندس مدني', { x:0.65, y:1.85, w:4.05, h:0.3, fontSize:10, color:'C48BFF', align:'right', fontFace:'Tajawal' });
+      s.addText('مقر العمل: إدارة مشاريع أرامكو', { x:0.65, y:2.2, w:4.05, h:0.3, fontSize:10.5, color:TX, align:'right', fontFace:'Tajawal' });
+      s.addText('الجوال: +966 50 275 5666', { x:0.65, y:2.55, w:4.05, h:0.3, fontSize:10.5, color:TX, align:'right', fontFace:'Tajawal' });
+      s.addText('azys313@gmail.com', { x:0.65, y:2.9, w:4.05, h:0.3, fontSize:10, color:TX, align:'right', fontFace:'Tajawal' });
+
+      s.addShape(pptx.ShapeType.roundRect, { x:0.5, y:4.3, w:9, h:1.05, fill:{ color:'1A3D66' }, line:{ color:'7FB8FF', width:0.6 }, rectRadius:0.08 });
+      s.addText('◈  Quantum Breeze', { x:0.5, y:4.4, w:9, h:0.4, fontSize:15, bold:true, color:'5FF2FF', align:'center', fontFace:'Tajawal' });
+      s.addText('نحو تكييف يعمل مع الطبيعة لا ضدها، ومدن سعودية ذكية ومستدامة تدعم رؤية 2030.', { x:0.5, y:4.85, w:9, h:0.45, fontSize:11, color:'C5E2F5', align:'center', fontFace:'Tajawal' });
+      addFooter(s, 12);
+    }
+
+    await pptx.writeFile({ fileName: 'Quantum_Breeze_Pitch.pptx' });
+    toast('تم تصدير PowerPoint بنجاح', 'success');
+  } catch(err) {
+    console.error(err);
+    toast('خطأ في التصدير: ' + err.message, 'error');
+  }
+};
+
+/* ================================================================
+   TOAST
+   ================================================================ */
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = '';
+  if (type) t.classList.add(type);
+  t.classList.add('show');
+  clearTimeout(toast._h);
+  toast._h = setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ================================================================
+   INIT
+   ================================================================ */
+function init() {
+  loadFromStorage();
+  buildSidebar();
+  renderSlide();
+}
+init();
+
+window.addEventListener('beforeunload', () => { captureCurrentSlideEdits(); saveToStorage(); });
+
+/* Slide fade-in keyframes */
+const styleEl = document.createElement('style');
+styleEl.textContent = '@keyframes slideFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}';
+document.head.appendChild(styleEl);
+</script>
+</body>
+</html>
